@@ -1,8 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
+import { fetchContacts } from 'service/phoneboockAPI';
 
 const initialState = {
   items: [],
+  isLoading: false,
+  error: null,
+
   filter: '',
 };
 
@@ -24,6 +28,17 @@ const phonebookSlice = createSlice({
     updateFilter(state, { payload }) {
       state.filter = payload;
     },
+  },
+  extraReducers: {
+    [fetchContacts.pending]: state => {
+      state.isLoading = true;
+    },
+    [fetchContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      console.log('action', payload);
+      state.items = payload;
+    },
+    [fetchContacts.rejected]: () => {},
   },
 });
 
