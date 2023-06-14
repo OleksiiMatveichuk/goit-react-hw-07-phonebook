@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
 import { fetchContacts } from 'service/phoneboockAPI';
+import { addContacts, deleteContacts } from 'service/phoneboockAPI';
 
 const initialState = {
   items: [],
@@ -14,17 +14,6 @@ const phonebookSlice = createSlice({
   name: 'phonebook',
   initialState,
   reducers: {
-    addContact: {
-      prepare: contact => {
-        return { payload: { ...contact, id: nanoid() } };
-      },
-      reducer: (state, action) => {
-        state.items.push(action.payload);
-      },
-    },
-    deleteContact(state, { payload }) {
-      state.items = state.items.filter(el => el.id !== payload);
-    },
     updateFilter(state, { payload }) {
       state.filter = payload;
     },
@@ -35,10 +24,27 @@ const phonebookSlice = createSlice({
     },
     [fetchContacts.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
-      console.log('action', payload);
       state.items = payload;
     },
-    [fetchContacts.rejected]: () => {},
+    // [fetchContacts.rejected]: () => { },
+
+    [addContacts.pending]: state => {
+      state.isLoading = true;
+    },
+    [addContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.items.push(payload);
+    },
+    // [addContacts.rejected]: () => { },
+
+    [deleteContacts.pending]: state => {
+      state.isLoading = true;
+    },
+    [deleteContacts.fulfilled]: (state, { payload }) => {
+      state.isLoading = false;
+      state.items = state.items.filter(el => el.id !== payload.id);
+    },
+    // [deleteContacts.rejected]: () => {},
   },
 });
 

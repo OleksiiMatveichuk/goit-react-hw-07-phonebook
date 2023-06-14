@@ -2,9 +2,9 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/slice';
+import { addContacts } from 'service/phoneboockAPI';
 
-export const ContactForm = ({ submit }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -29,7 +29,7 @@ export const ContactForm = ({ submit }) => {
   const onSubmit = e => {
     e.preventDefault();
     const contact = { name, number };
-    dispatch(addContact(contact));
+    dispatch(addContacts(contact));
 
     setName('');
     setNumber('');
