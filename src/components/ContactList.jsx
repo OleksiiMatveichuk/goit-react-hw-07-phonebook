@@ -2,22 +2,14 @@ import { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectContacts,
-  selectFilterContact,
-  selectIsLoading,
-} from 'redux/selectors';
+import { selectFilter, selectIsLoading } from 'redux/selectors';
 
 import { deleteContacts, fetchContacts } from 'service/phoneboockAPI';
 export const ContactList = () => {
-  const contacts = useSelector(selectContacts);
-  const filterValue = useSelector(selectFilterContact);
   const isLoading = useSelector(selectIsLoading);
   const dispatch = useDispatch();
 
-  const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filterValue.toLowerCase())
-  );
+  const filteredContacts = useSelector(selectFilter);
 
   useEffect(() => {
     dispatch(fetchContacts());
